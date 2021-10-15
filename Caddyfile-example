@@ -1,0 +1,7 @@
+# vi: ft=caddyfile
+<hostname> {
+    handle_path /backend/* {
+        reverse_proxy backend:8080
+    }
+    reverse_proxy frontend:5000
+}

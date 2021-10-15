@@ -1,0 +1,36 @@
+version: "3.9"
+
+services:
+  proxy:
+    image: caddy:latest
+    ports:
+      - 80:80
+    volumes:
+      - ./Caddyfile-dev:/etc/caddy/Caddyfile
+    networks:
+      - proxy
+    depends_on:
+      - frontend
+  frontend:
+    image: frontend-dev
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ../frontend:/usr/src/frontend
+    networks:
+      - proxy
+    depends_on:
+      - backend
+  backend:
+    image: backend-dev
+    build:
+      context: ../backend
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ../backend/src:/usr/src/server/src
+    networks:
+      - proxy
+
+networks:
+  proxy:

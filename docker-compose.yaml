@@ -1,0 +1,31 @@
+version: "3.9"
+
+services:
+  proxy:
+    image: caddy:latest
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+    networks:
+      - proxy
+    depends_on:
+      - frontend
+  frontend:
+    image: frontend
+    build:
+      context: ../frontend
+    networks:
+      - proxy
+    depends_on:
+      - backend
+  backend:
+    image: backend
+    build:
+      context: ../backend
+    networks:
+      - proxy
+
+networks:
+  proxy:
