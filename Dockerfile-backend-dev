@@ -1,0 +1,8 @@
+FROM openjdk:11
+
+WORKDIR /usr/src/server
+RUN apt-get update && apt-get install -y --no-install-recommends inotify-tools=3.14-8.1 && rm -r /var/lib/apt/lists/*
+COPY ./entrypoint-dev.sh /entrypoint.sh
+
+EXPOSE 8080
+CMD ["/entrypoint.sh"]

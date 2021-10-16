@@ -1,0 +1,19 @@
+FROM openjdk:11 AS builder
+
+WORKDIR /usr/src/server
+COPY . .
+
+RUN javac -d bin --source-path src src/server/main.java
+RUN mkdir dist
+WORKDIR /usr/src/server/bin
+RUN mkdir META-INF
+RUN echo "Main-Class: Server" > META-INF/MANIFEST.MF
+RUN jar cmvf META-INF/MANIFEST.MF ../dist/server.jar ./*
+
+FROM openjdk:11
+
+WORKDIR $JAVA_HOME/lib
+COPY --from=builder /usr/src/server/dist/server.jar .
+
+EXPOSE 8080
+ENTRYPOINT ["java", "-jar", "server.jar"]

@@ -1,0 +1,12 @@
+FROM node:16
+
+WORKDIR /usr/src/frontend
+COPY . .
+
+RUN npm install -g pnpm
+RUN pnpm install
+RUN pnpm run build
+
+EXPOSE 5000
+ENV HOST=0.0.0.0
+ENTRYPOINT ["pnpm", "run", "serve", "--", "--host"]
