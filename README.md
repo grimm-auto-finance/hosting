@@ -7,7 +7,7 @@ Place this repository in the same directory as the [frontend](https://github.com
 ### Development
 
 ```sh
-docker-compse -f docker-compose-dev.yaml up
+docker-compose -f docker-compose-dev.yaml up
 ```
 
 ### Production
