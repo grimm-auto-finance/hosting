@@ -6,4 +6,4 @@ RUN npm install -g pnpm
 
 EXPOSE 3000
 ENV HOST=0.0.0.0
-ENTRYPOINT ["pnpm", "run", "dev", "--", "--host"]
+ENTRYPOINT ["/bin/sh", "-c", "pnpm install && pnpm run dev -- --host"]
