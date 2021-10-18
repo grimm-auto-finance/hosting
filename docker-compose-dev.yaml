@@ -16,6 +16,8 @@ services:
     build:
       context: ../frontend
       dockerfile: ../hosting/Dockerfile-frontend-dev
+    environment:
+      VITE_BACKEND_BASE_URL: ${BACKEND_BASE_URL}
     volumes:
       - ../frontend:/usr/src/frontend
     networks:
@@ -27,6 +29,10 @@ services:
     build:
       context: ../backend
       dockerfile: ../hosting/Dockerfile-backend-dev
+    environment:
+      PORT: 8080
+      SENSO_API_BASE_URL: ${SENSO_API_BASE_URL}
+      SENSO_API_KEY: ${SENSO_API_KEY}
     volumes:
       - ../backend:/usr/src/server
     networks:

@@ -17,6 +17,8 @@ services:
     build:
       context: ../frontend
       dockerfile: ../hosting/Dockerfile-frontend
+    environment:
+      VITE_BACKEND_BASE_URL: ${BACKEND_BASE_URL}
     networks:
       - proxy
     depends_on:
@@ -26,6 +28,10 @@ services:
     build:
       context: ../backend
       dockerfile: ../hosting/Dockerfile-backend
+    environment:
+      PORT: 8080
+      SENSO_API_BASE_URL: ${SENSO_API_BASE_URL}
+      SENSO_API_KEY: ${SENSO_API_KEY}
     networks:
       - proxy
 
