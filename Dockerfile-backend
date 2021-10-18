@@ -1,19 +1,13 @@
-FROM openjdk:11 AS builder
+FROM gradle:jdk11 AS builder
 
 WORKDIR /usr/src/server
 COPY . .
 
-RUN javac -d bin --source-path src src/server/main.java
-RUN mkdir dist
-WORKDIR /usr/src/server/bin
-RUN mkdir META-INF
-RUN echo "Main-Class: Server" > META-INF/MANIFEST.MF
-RUN jar cmvf META-INF/MANIFEST.MF ../dist/server.jar ./*
+RUN gradle build
 
 FROM openjdk:11
 
 WORKDIR $JAVA_HOME/lib
-COPY --from=builder /usr/src/server/dist/server.jar .
+COPY --from=builder /usr/src/server/build/libs/backend-1.0-SNAPSHOT.jar ./backend.jar
 
-EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "server.jar"]
+ENTRYPOINT ["java", "-jar", "backend.jar"]

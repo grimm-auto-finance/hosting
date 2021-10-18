@@ -28,7 +28,7 @@ services:
       context: ../backend
       dockerfile: ../hosting/Dockerfile-backend-dev
     volumes:
-      - ../backend/src:/usr/src/server/src
+      - ../backend:/usr/src/server
     networks:
       - proxy
 

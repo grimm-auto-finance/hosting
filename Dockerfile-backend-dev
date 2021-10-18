@@ -1,8 +1,7 @@
-FROM openjdk:11
+FROM gradle:jdk11
 
 WORKDIR /usr/src/server
-RUN apt-get update && apt-get install -y --no-install-recommends inotify-tools=3.14-8.1 && rm -r /var/lib/apt/lists/*
-COPY ./entrypoint-dev.sh /entrypoint.sh
+RUN apt-get update && apt-get install -y --no-install-recommends inotify-tools=3.14-8 && rm -r /var/lib/apt/lists/*
 
 EXPOSE 8080
-CMD ["/entrypoint.sh"]
+CMD ["/bin/sh", "-c", "gradle build && java -jar build/libs/backend-1.0-SNAPSHOT.jar & while inotifywait -r -e create,modify,moved_from,delete src; do pkill java; gradle build && java -jar build/libs/backend-1.0-SNAPSHOT.jar & done"]
