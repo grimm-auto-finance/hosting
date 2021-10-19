@@ -4,7 +4,7 @@
 }
 
 http://localhost {
-    handle_path /backend/* {
+    handle_path /backend/v1/* {
         reverse_proxy backend:8080
     }
     reverse_proxy frontend:3000
