@@ -1,5 +1,7 @@
 FROM node:16
 
+ARG VITE_BACKEND_BASE_URL
+
 WORKDIR /usr/src/frontend
 COPY . .
 
