@@ -17,8 +17,8 @@ services:
     build:
       context: ../frontend
       dockerfile: ../hosting/Dockerfile-frontend
-    environment:
-      VITE_BACKEND_BASE_URL: ${BACKEND_BASE_URL}
+      args:
+        VITE_BACKEND_BASE_URL: ${BACKEND_BASE_URL}
     networks:
       - proxy
     depends_on:

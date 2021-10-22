@@ -3,11 +3,12 @@ FROM gradle:jdk11 AS builder
 WORKDIR /usr/src/server
 COPY . .
 
-RUN gradle build
+RUN gradle shadowJar
+RUN mv build/libs/backend-*-all.jar build/libs/backend.jar
 
 FROM openjdk:11
 
 WORKDIR $JAVA_HOME/lib
-COPY --from=builder /usr/src/server/build/libs/backend-1.0-SNAPSHOT.jar ./backend.jar
+COPY --from=builder /usr/src/server/build/libs/backend.jar ./backend.jar
 
 ENTRYPOINT ["java", "-jar", "backend.jar"]
