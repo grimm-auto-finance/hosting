@@ -33,10 +33,19 @@ services:
       PORT: 8080
       SENSO_API_BASE_URL: ${SENSO_API_BASE_URL}
       SENSO_API_KEY: ${SENSO_API_KEY}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - ../backend:/usr/src/server
     networks:
       - proxy
+      - db
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    networks:
+      - db
 
 networks:
   proxy:
+  db:
