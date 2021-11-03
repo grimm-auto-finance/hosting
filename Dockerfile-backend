@@ -9,6 +9,8 @@ RUN mv build/libs/backend-*-all.jar build/libs/backend.jar
 FROM openjdk:11
 
 WORKDIR $JAVA_HOME/lib
+RUN mkdir data
 COPY --from=builder /usr/src/server/build/libs/backend.jar ./backend.jar
+COPY --from=builder /usr/src/server/data/cars.csv ./data/cars.csv
 
 ENTRYPOINT ["java", "-jar", "backend.jar"]
