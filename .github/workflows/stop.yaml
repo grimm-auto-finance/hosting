@@ -1,5 +1,4 @@
 name: Stop with Ansible
-description: Deploys the project to the server
 on:
   workflow_dispatch:
 jobs:
