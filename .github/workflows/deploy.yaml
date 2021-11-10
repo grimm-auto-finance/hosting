@@ -1,5 +1,4 @@
 name: Deploy with Ansible
-description: Deploys the project to the server
 on:
   workflow_dispatch:
     inputs:
