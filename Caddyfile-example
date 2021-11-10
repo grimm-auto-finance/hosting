@@ -1,5 +1,5 @@
 # vi: ft=caddyfile
-<hostname> {
+<public_base_url> {
     handle_path /backend/v1/* {
         reverse_proxy backend:8080
     }

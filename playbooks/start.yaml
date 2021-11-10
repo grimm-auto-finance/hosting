@@ -1,0 +1,6 @@
+---
+- name: Start deployment
+  hosts: all
+  tasks:
+    - name: Start compose
+      import_tasks: ../tasks/start-compose.yaml

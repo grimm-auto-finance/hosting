@@ -1,0 +1,25 @@
+name: Stop with Ansible
+description: Deploys the project to the server
+on:
+  workflow_dispatch:
+    hosting_branch:
+      description: The branch to pull for the hosting repository
+      required: false
+      default: main
+    frontend_branch:
+      description: The branch to pull for the frontend repository
+      required: false
+      default: main
+    backend_branch:
+      description: The branch to pull for the backend repository
+      required: false
+      default: main
+jobs:
+  stop:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Ansible
+        run: pip3 install ansible
+      - name: Stop with ansible
+        run: ansible-playbook -i "root@$SERVER_HOSTNAME", playbooks/stop.yaml

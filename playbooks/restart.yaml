@@ -1,0 +1,6 @@
+---
+- name: Restart deployment
+  hosts: all
+  tasks:
+    - name: Restart compose
+      import_tasks: ../tasks/restart-compose.yaml
