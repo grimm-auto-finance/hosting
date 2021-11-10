@@ -22,7 +22,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Set up Ansible
         run: pip3 install ansible
-      - name: Deploy with ansible
+      - name: Deploy with Ansible
         run: ansible-playbook -i "root@$SERVER_HOSTNAME", playbooks/deploy.yaml
         env:
           PUBLIC_BASE_URL: ${{ secrets.PUBLIC_BASE_URL }}
