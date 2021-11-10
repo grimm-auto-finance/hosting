@@ -2,18 +2,6 @@ name: Restart with Ansible
 description: Deploys the project to the server
 on:
   workflow_dispatch:
-    hosting_branch:
-      description: The branch to pull for the hosting repository
-      required: false
-      default: main
-    frontend_branch:
-      description: The branch to pull for the frontend repository
-      required: false
-      default: main
-    backend_branch:
-      description: The branch to pull for the backend repository
-      required: false
-      default: main
 jobs:
   restart:
     runs-on: ubuntu-latest
