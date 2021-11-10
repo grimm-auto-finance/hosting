@@ -1,0 +1,5 @@
+---
+- name: Stop compose
+  import_tasks: stop-compose.yaml
+- name: Start compose
+  include_tasks: start-compose.yaml

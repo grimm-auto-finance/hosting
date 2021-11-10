@@ -1,0 +1,5 @@
+---
+- name: Stop compose
+  command:
+    chdir: ~/hosting
+    cmd: docker-compose down

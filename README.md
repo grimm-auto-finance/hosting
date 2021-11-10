@@ -18,11 +18,21 @@ docker-compose -f docker-compose-dev.yaml up
 cp Caddyfile-example Caddyfile
 ```
 
-Replace `<hostname>` in `Caddyfile` with the hostname of your server, for example: `http://localhost`
+Replace `<public_base_url>` in `Caddyfile` with the hostname of your server, for example: `https://example.com`
 
 ```sh
 docker-compose up
 ```
+
+### Ansible
+
+Create an inventory file, then run the following command to deploy the project to all hosts, make sure you specify the inventory:
+
+```sh
+ansible-playbook -i $INVENTORY playbooks/deploy.yaml
+```
+
+The playbooks `start`, `stop`, and `restart` can also be used to perform the actions their names suggest. Note that `restart` doesn't run `docker-compose restart`, it uses `stop` and then `start` to ensure that an updated compose file will be respected.
 
 ### Windows
 

@@ -1,0 +1,6 @@
+---
+- name: Stop deployment
+  hosts: all
+  tasks:
+    - name: Stop compose
+      import_tasks: ../tasks/stop-compose.yaml
