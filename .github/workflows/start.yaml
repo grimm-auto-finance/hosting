@@ -8,7 +8,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Set up Ansible
         run: pip3 install ansible
-      - name: Start with ansible
+      - name: Start with Ansible
         run: ansible-playbook -i "root@$SERVER_HOSTNAME", playbooks/start.yaml
         env:
           PUBLIC_BASE_URL: ${{ secrets.PUBLIC_BASE_URL }}

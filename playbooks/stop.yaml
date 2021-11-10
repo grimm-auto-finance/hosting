@@ -1,6 +1,8 @@
 ---
 - name: Stop deployment
   hosts: all
+  vars:
+    ansible_password: '{{ lookup("env", "SERVER_PASSWORD") }}'
   tasks:
     - name: Stop compose
       import_tasks: ../tasks/stop-compose.yaml

@@ -1,6 +1,8 @@
 ---
 - name: Start deployment
   hosts: all
+  vars:
+    ansible_password: '{{ lookup("env", "SERVER_PASSWORD") }}'
   tasks:
     - name: Start compose
       import_tasks: ../tasks/start-compose.yaml
