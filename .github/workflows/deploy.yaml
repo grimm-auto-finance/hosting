@@ -28,3 +28,4 @@ jobs:
           PUBLIC_BASE_URL: ${{ secrets.PUBLIC_BASE_URL }}
           SERVER_HOSTNAME: ${{ secrets.SERVER_HOSTNAME }}
           SERVER_PASSWORD: ${{ secrets.SERVER_PASSWORD }}
+          ANSIBLE_HOST_KEY_CHECKING: False
