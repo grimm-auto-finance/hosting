@@ -1,6 +1,5 @@
-# vi: ft=caddyfile
-<public_base_url> {
-    handle_path /backend/v1/* {
+https://{$BASE_URL} {
+    handle_path {$BACKEND_BASE_URL}/* {
         reverse_proxy backend:8080
     }
     reverse_proxy frontend:5000
