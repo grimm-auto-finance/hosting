@@ -2,92 +2,86 @@
 - name: Deploy the project
   hosts: all
   vars:
-    public_base_url: '{{ lookup("env", "PUBLIC_BASE_URL") }}'
     ansible_password: '{{ lookup("env", "SERVER_PASSWORD") }}'
     frontend_branch: '{{ lookup("env", "FRONTEND_BRANCH") or "main" }}'
     backend_branch: '{{ lookup("env", "BACKEND_BRANCH") or "main" }}'
     hosting_branch: '{{ lookup("env", "HOSTING_BRANCH") or "main" }}'
+  handlers:
+    - name: build frontend
+      command:
+        chdir: ~/hosting
+        cmd: docker-compose build frontend
+      notify: restart compose if running
+    - name: build backend
+      command:
+        chdir: ~/hosting
+        cmd: docker-compose build backend
+      notify: restart compose if running
+    - name: Check status
+      command:
+        cmd: docker-compose ls
+      register: compose_status
+      changed_when: '"hosting" in compose_status.stdout'
+      listen: restart compose if running
+      notify: restart compose
+    - name: restart compose
+      import_tasks: ../tasks/restart-compose.yaml
   tasks:
-    - name: Ensure the latest git is installed
+    - name: Ensure the latest git, Docker, and docker-compose are installed
       package:
-        name: git
-        state: latest
-    - name: Ensure the latest Docker is installed
-      package:
-        name: docker
+        name:
+          - git
+          - docker
+          - docker-compose # TODO: unecessary once the docker version is recent enough to include compose as a subcommand
         state: latest
     - name: Ensure Docker is running
       service:
         name: docker
         state: started
         enabled: true
-    - name: Ensure the latest docker-compose is installed
-      package:
-        name: docker-compose
-        state: latest
     - name: Clone/update hosting
       git:
         dest: ~/hosting
         repo: https://github.com/tli-group-4-grimm/hosting
         update: true
       register: clone_hosting
+      notify:
+        - build frontend
+        - build backend
     - name: Checkout hosting branch
       command:
         chdir: ~/hosting
-        cmd: 'git checkout {{ hosting_branch }}'
+        cmd: "git checkout {{ hosting_branch }}"
       register: checkout_hosting
       changed_when: '"Already on " not in checkout_hosting.stderr'
+      notify:
+        - build frontend
+        - build backend
     - name: Clone/update frontend
       git:
         dest: ~/frontend
         repo: https://github.com/tli-group-4-grimm/frontend
         update: true
       register: clone_frontend
+      notify: build frontend
     - name: Checkout frontend branch
       command:
         chdir: ~/frontend
-        cmd: 'git checkout {{ frontend_branch }}'
+        cmd: "git checkout {{ frontend_branch }}"
       register: checkout_frontend
       changed_when: '"Already on " not in checkout_frontend.stderr'
+      notify: build frontend
     - name: Clone/update backend
       git:
         dest: ~/backend
         repo: https://github.com/tli-group-4-grimm/backend
         update: true
       register: clone_backend
+      notify: build backend
     - name: Checkout backend branch
       command:
         chdir: ~/backend
-        cmd: 'git checkout {{ backend_branch }}'
+        cmd: "git checkout {{ backend_branch }}"
       register: checkout_backend
       changed_when: '"Already on " not in checkout_backend.stderr'
-    - name: Build frontend
-      command:
-        chdir: ~/hosting
-        cmd: docker-compose build frontend
-      when: clone_hosting.changed or checkout_hosting.changed or clone_frontend.changed or checkout_frontend.changed
-      register: build_frontend
-    - name: Build backend
-      command:
-        chdir: ~/hosting
-        cmd: docker-compose build backend
-      when: clone_hosting.changed or checkout_hosting.changed or clone_backend.changed or checkout_backend.changed
-      register: build_backend
-    - name: Copy Caddyfile-example to Caddyfile
-      copy:
-        src: ~/hosting/Caddyfile-example
-        dest: ~/hosting/Caddyfile
-        remote_src: true
-    - name: Replace public_base_url
-      replace:
-        path: ~/hosting/Caddyfile
-        regexp: "<public_base_url>"
-        replace: '{{ public_base_url }}'
-    - name: Check status
-      command:
-        cmd: docker-compose ls
-      register: compose_status
-      changed_when: false
-    - name: Restart compose
-      import_tasks: ../tasks/restart-compose.yaml
-      when: '"hosting" in compose_status and (build_frontend.changed or build_backend.changed)'
+      notify: build backend

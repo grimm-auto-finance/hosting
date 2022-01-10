@@ -5,6 +5,8 @@ services:
     image: caddy:latest
     ports:
       - 3000:80
+    environment:
+      BACKEND_BASE_URL: ${BACKEND_BASE_URL}
     volumes:
       - ./Caddyfile-dev:/etc/caddy/Caddyfile
     networks:
